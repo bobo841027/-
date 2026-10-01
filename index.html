@@ -1,0 +1,725 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>尊榮退休財務規劃系統 (線上版)</title>
+  
+  <style>
+    :root {
+      --primary: #0f172a;
+      --accent: #059669;
+      --accent-hover: #047857;
+      --accent-light: #ecfdf5;
+      --gold: #d97706;
+      --gold-light: #fffbeb;
+      --bg-color: #f8fafc;
+      --card-bg: #ffffff;
+      --text-main: #0f172a;
+      --text-muted: #64748b;
+      --border-color: #e2e8f0;
+      --radius-lg: 16px;
+      --radius-md: 12px;
+      --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.05);
+      --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    body {
+      background-color: var(--bg-color);
+      color: var(--text-main);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      padding-bottom: 30px;
+    }
+
+    header {
+      background-color: var(--primary);
+      color: #ffffff;
+      padding: 16px 24px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: var(--shadow-md);
+      position: sticky;
+      top: 0;
+      z-index: 50;
+    }
+
+    .header-brand h1 {
+      font-size: 18px;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+    }
+
+    .header-brand p {
+      font-size: 11px;
+      color: #34d399;
+      margin-top: 2px;
+    }
+
+    .header-actions {
+      display: flex;
+      gap: 10px;
+    }
+
+    .btn {
+      background-color: #334155;
+      color: #ffffff;
+      border: none;
+      padding: 10px 18px;
+      border-radius: var(--radius-md);
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      min-height: 42px;
+      transition: all 0.2s ease;
+    }
+
+    .btn-accent {
+      background-color: var(--accent);
+    }
+
+    .btn-accent:active, .btn-accent:hover {
+      background-color: var(--accent-hover);
+    }
+
+    main {
+      max-width: 1280px;
+      width: 100%;
+      margin: 0 auto;
+      padding: 20px;
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 20px;
+    }
+
+    @media (min-width: 960px) {
+      main {
+        grid-template-columns: 380px 1fr;
+      }
+    }
+
+    .panel {
+      background: var(--card-bg);
+      border-radius: var(--radius-lg);
+      padding: 24px;
+      border: 1px solid var(--border-color);
+      box-shadow: var(--shadow-sm);
+    }
+
+    .panel-title {
+      font-size: 17px;
+      font-weight: 700;
+      color: var(--primary);
+      margin-bottom: 4px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .panel-subtitle {
+      font-size: 12px;
+      color: var(--text-muted);
+      margin-bottom: 20px;
+    }
+
+    .section-group {
+      background: #f8fafc;
+      padding: 16px;
+      border-radius: var(--radius-md);
+      border: 1px solid var(--border-color);
+      margin-bottom: 16px;
+    }
+
+    .section-label {
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--primary);
+      border-left: 3px solid var(--accent);
+      padding-left: 8px;
+      margin-bottom: 14px;
+    }
+
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin-bottom: 12px;
+    }
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .form-group label {
+      font-size: 12px;
+      font-weight: 600;
+      color: #475569;
+    }
+
+    .input-text, .select-box {
+      width: 100%;
+      padding: 10px 12px;
+      border: 1px solid #cbd5e1;
+      border-radius: 8px;
+      font-size: 14px;
+      outline: none;
+      background: #ffffff;
+      color: var(--text-main);
+      -webkit-appearance: none;
+    }
+
+    .input-text:focus, .select-box:focus {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px rgba(5, 150, 105, 0.15);
+    }
+
+    .range-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 8px;
+    }
+
+    .range-val {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--accent);
+    }
+
+    input[type="range"] {
+      -webkit-appearance: none;
+      width: 100%;
+      height: 8px;
+      border-radius: 4px;
+      background: #cbd5e1;
+      outline: none;
+    }
+
+    input[type="range"]::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      background: var(--accent);
+      border: 3px solid #ffffff;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+      cursor: pointer;
+    }
+
+    .report-header {
+      border-bottom: 1px solid var(--border-color);
+      padding-bottom: 18px;
+      margin-bottom: 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    .badge {
+      display: inline-block;
+      background-color: var(--accent-light);
+      color: var(--accent);
+      font-size: 10px;
+      font-weight: 800;
+      padding: 4px 10px;
+      border-radius: 20px;
+      margin-bottom: 6px;
+      letter-spacing: 0.5px;
+    }
+
+    .report-title {
+      font-size: 22px;
+      font-weight: 900;
+      color: var(--primary);
+    }
+
+    .kpi-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 14px;
+      margin-bottom: 24px;
+    }
+
+    .kpi-card {
+      padding: 16px;
+      border-radius: var(--radius-md);
+      border: 1px solid var(--border-color);
+      background: #f8fafc;
+    }
+
+    .kpi-card.dark {
+      background: linear-gradient(135deg, #0f172a, #1e293b);
+      color: #ffffff;
+      border: none;
+    }
+
+    .kpi-label {
+      font-size: 11px;
+      font-weight: 600;
+      color: #64748b;
+    }
+
+    .kpi-card.dark .kpi-label {
+      color: #94a3b8;
+    }
+
+    .kpi-value {
+      font-size: 24px;
+      font-weight: 900;
+      margin-top: 6px;
+      color: var(--primary);
+    }
+
+    .kpi-card.dark .kpi-value {
+      color: #34d399;
+    }
+
+    .kpi-sub {
+      font-size: 11px;
+      margin-top: 4px;
+      color: var(--accent);
+      font-weight: 600;
+    }
+
+    .plan-list {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .plan-card {
+      border: 1px solid var(--border-color);
+      border-radius: 14px;
+      padding: 18px;
+      background: #ffffff;
+      position: relative;
+      transition: all 0.2s;
+    }
+
+    .plan-card.recommended {
+      border: 2px solid #059669;
+      background: linear-gradient(180deg, #f0fdf4 0%, #ffffff 100%);
+      box-shadow: 0 4px 14px rgba(5, 150, 105, 0.12);
+    }
+
+    .tag-recommend {
+      position: absolute;
+      top: -1px;
+      right: 20px;
+      background: linear-gradient(135deg, #059669, #047857);
+      color: #ffffff;
+      font-size: 11px;
+      font-weight: 800;
+      padding: 4px 12px;
+      border-bottom-left-radius: 8px;
+      border-bottom-right-radius: 8px;
+      box-shadow: 0 2px 6px rgba(4, 120, 87, 0.25);
+      letter-spacing: 0.5px;
+    }
+
+    .plan-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 12px;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .plan-name {
+      font-weight: 800;
+      font-size: 15px;
+      color: var(--primary);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .plan-price {
+      font-size: 16px;
+      font-weight: 900;
+      color: var(--primary);
+    }
+
+    .plan-card.recommended .plan-price {
+      color: #059669;
+      font-size: 20px;
+    }
+
+    .progress-track {
+      width: 100%;
+      height: 14px;
+      background: #e2e8f0;
+      border-radius: 8px;
+      overflow: hidden;
+      display: flex;
+      margin: 12px 0;
+    }
+
+    .bar-principal {
+      background-color: #059669;
+      height: 100%;
+      transition: width 0.3s ease;
+    }
+
+    .bar-interest {
+      background-color: #6366f1;
+      height: 100%;
+      transition: width 0.3s ease;
+    }
+
+    .plan-meta {
+      display: flex;
+      justify-content: space-between;
+      font-size: 11px;
+      color: var(--text-muted);
+      font-weight: 600;
+    }
+
+    .highlight-note {
+      font-size: 12px;
+      color: #14532d;
+      background: #f0fdf4;
+      padding: 12px;
+      border-radius: 8px;
+      margin-top: 12px;
+      border: 1px solid #bbf7d0;
+      line-height: 1.5;
+    }
+
+    @media print {
+      header, .no-print {
+        display: none !important;
+      }
+      main {
+        grid-template-columns: 1fr !important;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <header class="no-print">
+    <div class="header-brand">
+      <h1>尊榮客戶退休財務規劃系統</h1>
+      <p>線上即時版 • 複利槓桿模型</p>
+    </div>
+    <div class="header-actions">
+      <button class="btn btn-accent" onclick="window.print()">列印 / 存成 PDF</button>
+    </div>
+  </header>
+
+  <main>
+    <section class="panel no-print">
+      <div class="panel-title">⚙️ 顧問控制台</div>
+      <div class="panel-subtitle">微調參數，右側報告將自動發揮複利試算。</div>
+
+      <!-- 1. 客戶資料 -->
+      <div class="section-group">
+        <div class="section-label">1. 客戶基本資料</div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>客戶尊稱</label>
+            <input type="text" id="clientName" value="王經理" oninput="updateAll()" class="input-text">
+          </div>
+          <div class="form-group">
+            <label>目前月薪 (NT$)</label>
+            <input type="number" id="monthlySalary" value="50000" step="5000" oninput="updateAll()" class="input-text">
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>起存年齡 (歲)</label>
+            <input type="number" id="startAge" value="30" min="20" max="55" oninput="updateAll()" class="input-text">
+          </div>
+          <div class="form-group">
+            <label>預計退休 (歲)</label>
+            <input type="number" id="retireAge" value="60" min="50" max="75" oninput="updateAll()" class="input-text">
+          </div>
+        </div>
+      </div>
+
+      <!-- 2. 理財參數 -->
+      <div class="section-group">
+        <div class="section-label">2. 理財核心參數</div>
+        
+        <div style="margin-bottom: 16px;">
+          <div class="range-header">
+            <label style="font-size:12px; font-weight:600;">目標所得替代率</label>
+            <span class="range-val" id="lblReplaceRateNum">70%</span>
+          </div>
+          <input type="range" id="replaceRate" min="40" max="100" step="5" value="70" oninput="updateAll()">
+        </div>
+
+        <div style="margin-bottom: 16px;">
+          <div class="range-header">
+            <label style="font-size:12px; font-weight:600;">預估年化投資報酬率 (ROI)</label>
+            <span class="range-val" id="lblRoiNum">8%</span>
+          </div>
+          <input type="range" id="roi" min="3" max="15" step="0.5" value="8" oninput="updateAll()">
+        </div>
+
+        <div class="form-group">
+          <label>退休後提領模式</label>
+          <select id="payoutStrategy" onchange="updateAll()" class="select-box">
+            <option value="dividend">永續配息策略（本金不耗損，傳承後代）</option>
+            <option value="drawdown">折耗提領策略（提領至 85 歲帳戶歸零）</option>
+          </select>
+        </div>
+      </div>
+    </section>
+
+    <section class="panel">
+      
+      <div class="report-header">
+        <div>
+          <span class="badge">RETIREMENT FINANCIAL PROPOSAL</span>
+          <div class="report-title">尊榮退休財務規劃提案書</div>
+          <p style="font-size: 13px; color: #64748b; margin-top: 4px;">專為貴賓 <strong id="lblClientName" style="color:#0f172a;">王經理</strong> 量身打造</p>
+        </div>
+        <div style="text-align: right;">
+          <p style="font-size: 11px; color: #94a3b8;">專屬資產顧問團隊</p>
+          <p style="font-size: 13px; font-weight: 700; color: #0f172a;">睿智資產管理 Wealth Management</p>
+        </div>
+      </div>
+
+      <!-- KPI 儀表板 -->
+      <div class="kpi-grid">
+        <div class="kpi-card dark">
+          <div class="kpi-label">退休後每月生活金目標</div>
+          <div class="kpi-value" id="lblTargetIncome">$35,000</div>
+          <div style="font-size: 11px; color: #cbd5e1; margin-top: 4px;">(所得替代率 <span id="lblReplaceRate">70</span>%)</div>
+        </div>
+
+        <div class="kpi-card">
+          <div class="kpi-label">退休需累積總本金</div>
+          <div class="kpi-value" id="lblTargetNestEgg">$5,250,000</div>
+          <div class="kpi-sub" id="lblStrategyDesc">永續配息 / 保留完整本金</div>
+        </div>
+
+        <div class="kpi-card">
+          <div class="kpi-label">規劃準備總年限</div>
+          <div class="kpi-value"><span id="lblSavingYears">30</span> <span style="font-size: 14px;">年</span></div>
+          <div style="font-size: 11px; color: #94a3b8; margin-top: 4px;"><span id="lblAgeSpan">30</span> 歲至 <span id="lblRetireAgeSpan">60</span> 歲</div>
+        </div>
+      </div>
+
+      <!-- 方案清單 -->
+      <div>
+        <div style="font-size: 14px; font-weight: 800; color: #0f172a; margin-bottom: 14px; letter-spacing: 0.5px; display: flex; align-items: center; gap: 6px;">
+          📊 多元儲蓄方案比較與複利槓桿效益分析
+        </div>
+
+        <div class="plan-list">
+          
+          <!-- 方案一：10年黃金衝刺案 (顧問極力推薦) -->
+          <div class="plan-card recommended">
+            <div class="tag-recommend">🌟 顧問極力推薦方案</div>
+            <div class="plan-header">
+              <div class="plan-name">
+                <span>⚡ 方案一：10年黃金衝刺案</span>
+                <span style="font-size: 11px; background: #d1fae5; color: #065f46; padding: 2px 8px; border-radius: 12px; font-weight: 700;">只存前 10 年</span>
+              </div>
+              <div><span style="font-size: 11px; color: #065f46;">每月只需：</span><span class="plan-price" id="sol1Monthly">$5,825</span></div>
+            </div>
+            
+            <div class="progress-track">
+              <div id="sol1PrincipalBar" class="bar-principal" style="width: 13%"></div>
+              <div id="sol1InterestBar" class="bar-interest" style="width: 87%"></div>
+            </div>
+
+            <div class="plan-meta">
+              <span>自提總本金: <strong id="sol1Principal">$70 萬</strong> (<span id="sol1PrincipalPct">13</span>%)</span>
+              <span>複利膨脹利息: <strong id="sol1Interest">$455 萬</strong> (<span id="sol1InterestPct">87</span>%)</span>
+            </div>
+
+            <div class="highlight-note">
+              🚀 <strong>顧問專業分析：</strong>只要在前 10 年集中火力準備，之後的 <span id="sol1WaitYears">20</span> 年<strong>完全不用再掏出半毛錢</strong>！透過時間複利滾存，自提本金僅佔總退休金的 <strong><span id="sol1HighlightPct">13</span>%</strong>，剩餘 <strong><span id="sol1HighlightInterestPct">87</span>% 全由時間與複利幫您達成</strong>，是資金效率最高、最輕鬆的專案選擇！
+            </div>
+          </div>
+
+          <!-- 方案二：20年穩健配置案 -->
+          <div class="plan-card">
+            <div class="plan-header">
+              <div class="plan-name">方案二：20年穩健配置案（存前 20 年，最後 <span id="sol2WaitYears">10</span> 年純滾利）</div>
+              <div><span style="font-size: 11px; color: #64748b;">每月需存：</span><span class="plan-price" id="sol2Monthly">$4,058</span></div>
+            </div>
+            <div class="progress-track">
+              <div id="sol2PrincipalBar" class="bar-principal" style="width: 18%"></div>
+              <div id="sol2InterestBar" class="bar-interest" style="width: 82%"></div>
+            </div>
+            <div class="plan-meta">
+              <span>自提總本金: <strong id="sol2Principal">$97 萬</strong> (<span id="sol2PrincipalPct">18</span>%)</span>
+              <span>複利膨脹利息: <strong id="sol2Interest">$428 萬</strong> (<span id="sol2InterestPct">82</span>%)</span>
+            </div>
+          </div>
+
+          <!-- 方案三：起步稍晚案 (晚 10 年才開始存，存滿 20 年到退休) -->
+          <div class="plan-card" style="border-color: #fdba74; background: #fff7ed;">
+            <div class="plan-header">
+              <div class="plan-name" style="color: #c2410c;">方案三：起步稍晚案（晚 10 年開始，直接存滿 20 年至退休）</div>
+              <div><span style="font-size: 11px; color: #9a3412;">每月急需：</span><span class="plan-price" style="color:#c2410c;" id="sol3Monthly">$8,914</span></div>
+            </div>
+            <div class="progress-track">
+              <div id="sol3PrincipalBar" class="bar-principal" style="width: 41%; background-color: #ea580c;"></div>
+              <div id="sol3InterestBar" class="bar-interest" style="width: 59%"></div>
+            </div>
+            <div class="plan-meta">
+              <span>自提總本金: <strong id="sol3Principal">$214 萬</strong> (<span id="sol3PrincipalPct">41</span>%)</span>
+              <span>複利膨脹利息: <strong id="sol3Interest">$311 萬</strong> (<span id="sol3InterestPct">59</span>%)</span>
+            </div>
+            <div style="font-size: 11px; color: #9a3412; margin-top: 8px;">
+              ⚠️ 遲延代價：因為晚了 10 年啟動時間引擎，月負擔大增近 <strong>53%</strong>，自提總本金更增加了 <strong><span id="diffPrincipal">$144 萬</span></strong>！
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+    </section>
+
+  </main>
+
+  <script>
+    // PMT 計算公式 (年金終值算每期應繳金額)
+    function calculatePMT(rate, nper, fv) {
+      if (rate === 0) return fv / nper;
+      return fv * rate / (Math.pow(1 + rate, nper) - 1);
+    }
+
+    function updateAll() {
+      const clientName = document.getElementById('clientName').value || '貴賓';
+      const monthlySalary = parseFloat(document.getElementById('monthlySalary').value) || 50000;
+      const startAge = parseInt(document.getElementById('startAge').value) || 30;
+      const retireAge = parseInt(document.getElementById('retireAge').value) || 60;
+      const replaceRate = parseInt(document.getElementById('replaceRate').value) || 70;
+      const roi = parseFloat(document.getElementById('roi').value) / 100 || 0.08;
+      const payoutStrategy = document.getElementById('payoutStrategy').value;
+
+      document.getElementById('lblClientName').textContent = clientName;
+      document.getElementById('lblReplaceRateNum').textContent = replaceRate + '%';
+      document.getElementById('lblRoiNum').textContent = (roi * 100).toFixed(1) + '%';
+
+      // 計算退休目標月生活費
+      const targetMonthlyIncome = Math.round(monthlySalary * (replaceRate / 100));
+      document.getElementById('lblTargetIncome').textContent = '$' + targetMonthlyIncome.toLocaleString();
+      document.getElementById('lblReplaceRate').textContent = replaceRate;
+
+      let targetNestEgg = 0;
+      const monthlyRoi = roi / 12;
+
+      if (payoutStrategy === 'dividend') {
+        targetNestEgg = Math.round((targetMonthlyIncome * 12) / roi);
+        document.getElementById('lblStrategyDesc').textContent = `永續配息 / ${(targetNestEgg / 10000).toFixed(0)}萬本金永不耗損`;
+      } else {
+        const months = 25 * 12; // 25年提領折耗
+        targetNestEgg = Math.round(targetMonthlyIncome * (1 - Math.pow(1 + monthlyRoi, -months)) / monthlyRoi);
+        document.getElementById('lblStrategyDesc').textContent = '按月折耗 / 領至 85 歲帳戶歸零';
+      }
+
+      document.getElementById('lblTargetNestEgg').textContent = '$' + targetNestEgg.toLocaleString();
+
+      const savingYears = Math.max(1, retireAge - startAge);
+      document.getElementById('lblSavingYears').textContent = savingYears;
+      document.getElementById('lblAgeSpan').textContent = startAge;
+      document.getElementById('lblRetireAgeSpan').textContent = retireAge;
+
+      // ==========================================
+      // 方案一：10 年極速衝刺案 (存前 10 年，後面滾利) - 顧問極力推薦
+      // ==========================================
+      const sol1PayYears = 10;
+      const sol1WaitYears = Math.max(0, savingYears - sol1PayYears);
+      document.getElementById('sol1WaitYears').textContent = sol1WaitYears;
+
+      // 第10年底需要累積的目標金額 (透過剩餘年限折現)
+      const targetAtYear10 = targetNestEgg / Math.pow(1 + monthlyRoi, sol1WaitYears * 12);
+      const sol1Monthly = Math.round(calculatePMT(monthlyRoi, sol1PayYears * 12, targetAtYear10));
+      const sol1Principal = sol1Monthly * sol1PayYears * 12;
+      const sol1Interest = targetNestEgg - sol1Principal;
+
+      const sol1PrincipalPct = Math.round((sol1Principal / targetNestEgg) * 100);
+      const sol1InterestPct = 100 - sol1PrincipalPct;
+
+      document.getElementById('sol1Monthly').textContent = '$' + sol1Monthly.toLocaleString();
+      document.getElementById('sol1Principal').textContent = '$' + Math.round(sol1Principal / 10000) + ' 萬';
+      document.getElementById('sol1Interest').textContent = '$' + Math.round(sol1Interest / 10000) + ' 萬';
+      document.getElementById('sol1PrincipalPct').textContent = sol1PrincipalPct;
+      document.getElementById('sol1InterestPct').textContent = sol1InterestPct;
+      document.getElementById('sol1HighlightPct').textContent = sol1PrincipalPct;
+      document.getElementById('sol1HighlightInterestPct').textContent = sol1InterestPct;
+
+      document.getElementById('sol1PrincipalBar').style.width = sol1PrincipalPct + '%';
+      document.getElementById('sol1InterestBar').style.width = sol1InterestPct + '%';
+
+      // ==========================================
+      // 方案二：20 年穩健配置案 (存前 20 年，後面滾利)
+      // ==========================================
+      const sol2PayYears = Math.min(20, savingYears);
+      const sol2WaitYears = Math.max(0, savingYears - sol2PayYears);
+      document.getElementById('sol2WaitYears').textContent = sol2WaitYears;
+
+      const targetAtYear20 = targetNestEgg / Math.pow(1 + monthlyRoi, sol2WaitYears * 12);
+      const sol2Monthly = Math.round(calculatePMT(monthlyRoi, sol2PayYears * 12, targetAtYear20));
+      const sol2Principal = sol2Monthly * sol2PayYears * 12;
+      const sol2Interest = targetNestEgg - sol2Principal;
+
+      const sol2PrincipalPct = Math.round((sol2Principal / targetNestEgg) * 100);
+      const sol2InterestPct = 100 - sol2PrincipalPct;
+
+      document.getElementById('sol2Monthly').textContent = '$' + sol2Monthly.toLocaleString();
+      document.getElementById('sol2Principal').textContent = '$' + Math.round(sol2Principal / 10000) + ' 萬';
+      document.getElementById('sol2Interest').textContent = '$' + Math.round(sol2Interest / 10000) + ' 萬';
+      document.getElementById('sol2PrincipalPct').textContent = sol2PrincipalPct;
+      document.getElementById('sol2InterestPct').textContent = sol2InterestPct;
+
+      document.getElementById('sol2PrincipalBar').style.width = sol2PrincipalPct + '%';
+      document.getElementById('sol2InterestBar').style.width = sol2InterestPct + '%';
+
+      // ==========================================
+      // 方案三：起步稍晚案 (晚 10 年才開始存，存滿 20 年到退休)
+      // ==========================================
+      const sol3PayYears = Math.min(20, Math.max(1, savingYears - 10));
+      const sol3Monthly = Math.round(calculatePMT(monthlyRoi, sol3PayYears * 12, targetNestEgg));
+      const sol3Principal = sol3Monthly * sol3PayYears * 12;
+      const sol3Interest = targetNestEgg - sol3Principal;
+
+      const sol3PrincipalPct = Math.round((sol3Principal / targetNestEgg) * 100);
+      const sol3InterestPct = 100 - sol3PrincipalPct;
+
+      document.getElementById('sol3Monthly').textContent = '$' + sol3Monthly.toLocaleString();
+      document.getElementById('sol3Principal').textContent = '$' + Math.round(sol3Principal / 10000) + ' 萬';
+      document.getElementById('sol3Interest').textContent = '$' + Math.round(sol3Interest / 10000) + ' 萬';
+      document.getElementById('sol3PrincipalPct').textContent = sol3PrincipalPct;
+      document.getElementById('sol3InterestPct').textContent = sol3InterestPct;
+
+      document.getElementById('sol3PrincipalBar').style.width = sol3PrincipalPct + '%';
+      document.getElementById('sol3InterestBar').style.width = sol3InterestPct + '%';
+
+      // 差額計算（比較方案三與推薦的方案一）
+      const diffPrincipalVal = sol3Principal - sol1Principal;
+      document.getElementById('diffPrincipal').textContent = '$' + Math.round(diffPrincipalVal / 10000) + ' 萬';
+    }
+
+    window.onload = function() {
+      updateAll();
+    };
+  </script>
+</body>
+</html>
